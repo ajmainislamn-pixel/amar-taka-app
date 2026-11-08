@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#123b32">
+<title>আমার টাকা</title>
+<style>
+:root{--deep:#123b32;--green:#16845b;--bg:#f3f7f5;--ink:#17231f;--muted:#6c7b74;--line:#e4ece7;--red:#b52d36;--gold:#9a6b12}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,"Noto Sans Bengali",sans-serif}
+header{background:linear-gradient(135deg,#123b32,#16845b);color:white;padding:22px 18px 30px;border-radius:0 0 25px 25px}
+header h1{margin:0;font-size:23px}header p{margin:5px 0 0;color:#d8eee4;font-size:13px}
+main{max-width:680px;margin:-15px auto 28px;padding:0 13px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{background:white;border-radius:17px;padding:15px;box-shadow:0 3px 14px #153c2b0c}
+.metric small{display:block;color:var(--muted);font-size:12px}.metric strong{display:block;font-size:21px;margin-top:6px;overflow-wrap:anywhere}
+.income strong,.saved strong{color:var(--green)}.expense strong,.owe strong{color:var(--red)}.receive strong{color:#1769aa}
+section{margin-top:13px}.heading{font-size:16px;font-weight:750;margin:0 0 11px}
+label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
+input,select,button{font:inherit;width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:white;color:var(--ink)}
+form{display:grid;gap:10px}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+button{border:0;background:var(--green);color:white;font-weight:700;cursor:pointer}
+button.alt{background:#e9f2ed;color:var(--deep)}button.del{width:auto;padding:7px 9px;background:#fff0f0;color:var(--red);font-size:12px}
+.toolbar{display:flex;align-items:center;gap:8px}.toolbar .heading{flex:1;margin:0}.toolbar select{width:auto;max-width:145px;padding:9px}
+.entry{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 0;border-bottom:1px solid var(--line)}
+.entry:last-child{border:0}.entry b{display:block;font-size:14px}.entry small{color:var(--muted);font-size:11px}
+.right{display:flex;align-items:center;gap:8px}.amt{font-weight:750;white-space:nowrap;font-size:14px}
+.plus{color:var(--green)}.minus{color:var(--red)}.neutral{color:var(--gold)}
+.empty{text-align:center;color:var(--muted);font-size:13px;padding:22px 8px}
+.hint{font-size:12px;line-height:1.6;color:var(--muted);margin:12px 2px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:15px}
+</style>
+</head>
+<body>
+<header><h1>আমার টাকা</h1><p>আয় • খরচ • সঞ্চয় • ধার-দেনার হিসাব</p></header>
+<main>
+<div class="grid">
+ <div class="card metric income"><small>মোট আয়</small><strong id="income">৳০</strong></div>
+ <div class="card metric expense"><small>মোট খরচ</small><strong id="expense">৳০</strong></div>
+ <div class="card metric saved"><small>সঞ্চয়ে আছে</small><strong id="savings">৳০</strong></div>
+ <div class="card metric receive"><small>অন্যের কাছে পাওনা</small><strong id="receivable">৳০</strong></div>
+ <div class="card metric owe"><small>অন্যকে দিতে হবে</small><strong id="payable">৳০</strong></div>
+ <div class="card metric"><small>হাতে থাকা টাকা (হিসাবমতে)</small><strong id="cash">৳০</strong></div>
+</div>
+
+<section class="card">
+ <h2 class="heading">নতুন হিসাব যোগ করুন</h2>
+ <form id="form">
+  <div><label for="kind">হিসাবের ধরন</label>
+   <select id="kind">
+    <option value="income">আয়</option><option value="expense">খরচ</option>
+    <option value="save">সঞ্চয়ে জমা</option><option value="unsave">সঞ্চয় থেকে তোলা</option>
+    <option value="lend">কাউকে ধার দিলাম</option><option value="collect">ধার ফেরত পেলাম</option>
+    <option value="borrow">কারও কাছ থেকে ধার নিলাম</option><option value="repay">ধার শোধ করলাম</option>
+   </select>
+  </div>
+  <div class="two">
+   <div><label for="amount">টাকার পরিমাণ (৳)</label><input id="amount" type="number" min="0.01" step="0.01" placeholder="যেমন ৫০০" required></div>
+   <div><label for="date">তারিখ</label><input id="date" type="date" required></div>
+  </div>
+  <div><label for="person">কার সঙ্গে / বিবরণ</label><input id="person" maxlength="70" placeholder="যেমন: বেতন, বাজার, রহিম" required></div>
+  <button type="submit">+ হিসাব সেভ করুন</button>
+ </form>
+ <p class="hint" style="margin-bottom:0">ধার দেওয়ার সময় “কাউকে ধার দিলাম” এবং টাকা ফেরত পেলে “ধার ফেরত পেলাম” নির্বাচন করুন। নিজের সঞ্চয়ে টাকা রাখলে “সঞ্চয়ে জমা” দিন।</p>
+</section>
+
+<section class="card">
+ <div class="toolbar"><h2 class="heading">লেনদেনের তালিকা</h2><select id="filter"><option value="all">সব হিসাব</option></select></div>
+ <div id="list"><div class="empty">এখনো কোনো হিসাব যোগ করা হয়নি।</div></div>
+</section>
+<p class="hint">সব তথ্য এই ফোনের ব্রাউজারে থাকে। ব্রাউজারের ডেটা মুছে গেলে হিসাব হারাতে পারেন। নিয়মিত ব্যাকআপ ডাউনলোড করে রাখুন।</p>
+<div class="actions"><button class="alt" id="backup">ব্যাকআপ ডাউনলোড</button><button class="alt" id="restore">ব্যাকআপ ফেরত আনুন</button></div>
+<input type="file" id="file" accept=".json,application/json" hidden>
+<footer>ব্যক্তিগত হিসাব • আপনার ফোনেই সংরক্ষিত</footer>
+</main>
+<script>
+const $=id=>document.getElementById(id),KEY='amar-taka-v2';
+let data=[];try{data=JSON.parse(localStorage.getItem(KEY)||'[]');if(!Array.isArray(data))data=[]}catch(e){data=[]}
+const today=new Date();$('date').value=[today.getFullYear(),String(today.getMonth()+1).padStart(2,'0'),String(today.getDate()).padStart(2,'0')].join('-');
+const fmt=n=>'৳'+Number(n||0).toLocaleString('bn-BD',{maximumFractionDigits:2});
+const names={income:'আয়',expense:'খরচ',save:'সঞ্চয়ে জমা',unsave:'সঞ্চয় থেকে তোলা',lend:'কাউকে ধার দিলাম',collect:'ধার ফেরত পেলাম',borrow:'ধার নিলাম',repay:'ধার শোধ করলাম'};
+function sum(type){return data.filter(x=>x.kind===type).reduce((s,x)=>s+Number(x.amount),0)}
+function calc(){
+ const inc=sum('income'),exp=sum('expense'),sav=sum('save')-sum('unsave');
+ const rec=sum('lend')-sum('collect'),pay=sum('borrow')-sum('repay');
+ // হাতে থাকা নগদ: আয় + ধার নেওয়া + ফেরত পাওয়া + সঞ্চয় থেকে তোলা - খরচ - সঞ্চয় জমা - ধার দেওয়া - ধার শোধ
+ const cash=inc+sum('borrow')+sum('collect')+sum('unsave')-exp-sum('save')-sum('lend')-sum('repay');
+ $('income').textContent=fmt(inc);$('expense').textContent=fmt(exp);$('savings').textContent=fmt(sav);
+ $('receivable').textContent=fmt(rec);$('payable').textContent=fmt(pay);$('cash').textContent=fmt(cash);
+}
+function persist(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function render(){
+ calc();const chosen=$('filter').value,months=[...new Set(data.map(x=>(x.date||'').slice(0,7)).filter(Boolean))].sort().reverse();
+ $('filter').innerHTML='<option value="all">সব হিসাব</option>'+months.map(m=>`<option value="${m}">${m}</option>`).join('');
+ $('filter').value=months.includes(chosen)?chosen:'all';
+ const rows=(chosen==='all'?data:data.filter(x=>x.date.slice(0,7)===chosen)).slice().sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id);
+ $('list').innerHTML='';
+ if(!rows.length){$('list').innerHTML='<div class="empty">এই সময়ে কোনো হিসাব নেই।</div>';return}
+ rows.forEach(x=>{
+  const div=document.createElement('div');div.className='entry';
+  const l=document.createElement('div'),b=document.createElement('b'),sm=document.createElement('small');
+  b.textContent=x.person;sm.textContent=x.date+' • '+names[x.kind];l.append(b,sm);
+  const r=document.createElement('div');r.className='right';const a=document.createElement('span');a.className='amt';
+  const positive=['income','borrow','collect','unsave'].includes(x.kind);
+  a.classList.add(positive?'plus':(['expense','lend','repay','save'].includes(x.kind)?'minus':'neutral'));
+  a.textContent=(positive?'+':'−')+fmt(x.amount);
+  const d=document.createElement('button');d.className='del';d.textContent='মুছুন';d.onclick=()=>{if(confirm('এই হিসাব মুছবেন?')){data=data.filter(y=>y.id!==x.id);persist()}};
+  r.append(a,d);div.append(l,r);$('list').append(div);
+ });
+}
+$('form').onsubmit=e=>{e.preventDefault();const amount=Number($('amount').value),person=$('person').value.trim(),date=$('date').value;
+ if(!amount||amount<0||!person||!date){alert('সব তথ্য ঠিকভাবে পূরণ করুন।');return}
+ data.push({id:Date.now()+Math.random(),kind:$('kind').value,amount,person,date});persist();
+ $('amount').value='';$('person').value='';$('kind').value='income';
+};
+$('filter').onchange=render;
+$('backup').onclick=()=>{const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='amar-taka-backup.json';a.click();URL.revokeObjectURL(url)};
+$('restore').onclick=()=>$('file').click();
+$('file').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!Array.isArray(x))throw Error();if(confirm('ব্যাকআপের হিসাবগুলো বর্তমান হিসাবের সঙ্গে যোগ করবেন?')){data=data.concat(x);persist();alert('ব্যাকআপ যোগ হয়েছে।')}}catch(err){alert('ব্যাকআপ ফাইলটি সঠিক নয়।')}e.target.value=''};
+render();
+</script>
+</body></html>
